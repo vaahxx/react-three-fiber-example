@@ -1,43 +1,35 @@
 "use client";
-import { useEffect, useRef } from "react";
+
+import { useRef } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { Mesh } from "three";
 
-export function Shiba() {
-  const Model = () => {
-    const fileUrl = "/shiba/scene.gltf";
-    const mesh = useRef<ThreeElements.mesh>();
-    const gltf = useLoader(GLTFLoader, fileUrl);
+function MeshComponent() {
+  const fileUrl = "/shiba/scene.gltf";
+  const mesh = useRef<Mesh>(null!);
+  const gltf = useLoader(GLTFLoader, fileUrl);
 
-    useEffect(() => {
-      return () => {
-        mesh.current?.parent?.remove(mesh.current);
-      };
-    }, []);
-
-    useFrame(() => {
-      if (mesh.current) {
-        mesh.current.rotation.y += 0.01;
-      }
-    });
-
-    return (
-      <>
-        <mesh ref={mesh}>
-          <primitive object={gltf.scene} />
-        </mesh>
-      </>
-    );
-  };
+  useFrame(() => {
+    mesh.current.rotation.y += 0.01;
+  });
 
   return (
+    <mesh ref={mesh}>
+      <primitive object={gltf.scene} />
+    </mesh>
+  );
+}
+
+export function Shiba() {
+  return (
     <div className='flex justify-center items-center h-screen'>
-      <Canvas style={{ height: "600px", width: "600px" }}>
+      <Canvas className='h-2xl w-2xl'>
         <OrbitControls />
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <Model />
+        <MeshComponent />
       </Canvas>
     </div>
   );

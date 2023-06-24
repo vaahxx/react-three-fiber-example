@@ -1,4 +1,4 @@
-import { Shiba } from "./components/Shiba";
+import { Shiba } from "./components/shiba";
 
 export default function Home() {
   return (
